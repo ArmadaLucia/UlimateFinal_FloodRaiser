@@ -18,6 +18,15 @@ public class PlasmaGun : MonoBehaviour
     public GameObject PuzzleNote;
     public Rigidbody rigid;
 
+    public AudioClip shootSound;
+    public AudioSource source;
+
+    public AudioClip openletter;
+    public AudioClip closeletter;
+    public AudioSource letter;
+
+    public AudioClip impactsound;
+    public AudioSource impact;
 
     void Update()
     {
@@ -34,9 +43,7 @@ public class PlasmaGun : MonoBehaviour
             Note.SetActive(false);
             PuzzleNote.SetActive(false);
             rigid.isKinematic = false;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-
+            letter.PlayOneShot(closeletter, 1F);
 
         }
     }
@@ -45,29 +52,30 @@ public class PlasmaGun : MonoBehaviour
         {
             DustColors.Play();
             BollBullet.Play();
+            source.PlayOneShot(shootSound, 1F);
 
-            //RaycastHit gathers all info about shooting a ray
-            //transform talks about the x, y, z position of an object
-            //out hit calls up the ray to give away that it hit something
-            //range will here say that after 100f the ray will disapear into the air
-            RaycastHit hit;
+        //RaycastHit gathers all info about shooting a ray
+        //transform talks about the x, y, z position of an object
+        //out hit calls up the ray to give away that it hit something
+        //range will here say that after 100f the ray will disapear into the air
+        RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
             {
                 Debug.Log(hit.transform.name);
+       
 
                 //only punching when hitting a target
                 Target target = hit.transform.GetComponent<Target>();
                 if (target != null)
                 {
                     target.TakeDamage(damage);
-                }
-
+            }
                 // null is letterlijk niets, geen waarde
                 // -hit.normal betekend naar achteren worden geschoten
                 if (hit.collider.tag == "OpalBlock" && hit.rigidbody != null)
                 {
                     hit.rigidbody.AddForce(-hit.normal * ImpactForce);
-                }
+            }
 
                  if (hit.collider.tag == "HangOpalblock" && hit.rigidbody != null)
                 {
@@ -82,6 +90,10 @@ public class PlasmaGun : MonoBehaviour
                     rigid.isKinematic = true;
                     DustColors.Stop();
                     BollBullet.Stop();
+                    source.Stop();
+                    impact.Stop();
+                    letter.clip = openletter;
+                    letter.Play();
             }
                  if (hit.collider.tag == "PuzzleNote")
             {
@@ -90,6 +102,10 @@ public class PlasmaGun : MonoBehaviour
                 rigid.isKinematic = true;
                 DustColors.Stop();
                 BollBullet.Stop();
+                source.Stop();
+                impact.Stop();
+                letter.clip = openletter;
+                letter.Play();
 
             }
 
@@ -98,7 +114,8 @@ public class PlasmaGun : MonoBehaviour
                 Debug.Log("Impact.Detected");
 
                 Destroy(impactGO, 2f);
-            }
+                impact.PlayOneShot(impactsound, 1F);
+        }
 
         }
     }

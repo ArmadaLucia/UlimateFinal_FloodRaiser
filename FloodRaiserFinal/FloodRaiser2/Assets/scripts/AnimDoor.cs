@@ -9,6 +9,11 @@ public class AnimDoor : MonoBehaviour
     public ConstantForce Water;
     public GameObject colli;
 
+    public AudioClip WinPuzzle;
+    public AudioSource WinPuzzleSource;
+    public AudioClip DeathPuzzle;
+    public AudioSource DeathPuzzleSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +28,7 @@ public class AnimDoor : MonoBehaviour
             anim.Play("Deur");
             Debug.Log("YOU WIN!");
             colli.SetActive(false);
+            WinPuzzleSource.PlayOneShot(WinPuzzle, 1F);
         }
 
         if (Input.GetKeyDown("4"))
@@ -34,6 +40,7 @@ public class AnimDoor : MonoBehaviour
 
             rigidbody.velocity = Vector3.back;
             rigidbody.angularVelocity = Vector3.back;
+            DeathPuzzleSource.PlayOneShot(DeathPuzzle, 1F);
         }
 }
     }

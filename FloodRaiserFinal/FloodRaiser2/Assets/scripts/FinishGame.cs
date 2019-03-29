@@ -9,14 +9,24 @@ public class FinishGame : MonoBehaviour
 
     public GameManager gamemanager;
 
+    public AudioClip WinEndTrigger;
+    public AudioSource WinEndTriggerSource;
+
+    public bool alreadyPlayed = false;
+
 
     void OnTriggerEnter(Collider trig)
     {
         if (trig.CompareTag("Player"))
         {
-            gamemanager.CompleteGame();
-            FinishUI.SetActive(true);
-            Crosshair.Play("CrosshairGo");
+            if (!alreadyPlayed)
+            { 
+                gamemanager.CompleteGame();
+                FinishUI.SetActive(true);
+                Crosshair.Play("CrosshairGo");
+                WinEndTriggerSource.PlayOneShot(WinEndTrigger, 1F);
+                alreadyPlayed = true;
+            }
         }
     }
 }

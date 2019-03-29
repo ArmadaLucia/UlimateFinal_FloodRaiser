@@ -8,19 +8,30 @@ public class TsunamiTrigger : MonoBehaviour
     public GameObject Tsunami;
     public ConstantForce Water;
 
+    public AudioClip ChasingSound;
+    public AudioSource sound;
+
+    public AudioClip BeachSound;
+    public AudioSource introsound;
+
+    public bool alreadyPlayed = false;
+
     void OnTriggerEnter(Collider trig)
     {
         if (trig.CompareTag("Player"))
         {
-            Debug.Log("Tsunami Triggered!");
-            Tsunami.SetActive(true);
+            if (!alreadyPlayed)
+            {
+                Debug.Log("Tsunami Triggered!");
+                Tsunami.SetActive(true);
 
-            Water.enabled = true;
+                Water.enabled = true;
 
-            /*
-            var myobj = FindObjectOfType<ConstantMovement>();
-            myobj.enabled = true;
-            */
+                introsound.Stop();
+                sound.clip = ChasingSound;
+                sound.Play();
+                alreadyPlayed = true;
+            }
         }
     }
 }

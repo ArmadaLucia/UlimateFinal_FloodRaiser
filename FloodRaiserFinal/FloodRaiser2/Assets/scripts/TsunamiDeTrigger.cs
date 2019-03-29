@@ -8,18 +8,37 @@ public class TsunamiDeTrigger : MonoBehaviour
     public GameObject Tsunami;
     public ConstantForce Water;
 
+    public AudioClip ChasingSound;
+    public AudioSource sound;
+
+    public AudioClip EndChaseSound;
+    public AudioSource exsound;
+
+    public AudioClip DeathPuzzle;
+    public AudioSource DeathPuzzleSource;
+
+    public bool alreadyPlayed = false;
+
     void OnTriggerEnter(Collider trig)
     {
         if (trig.CompareTag("Player"))
         {
-            Debug.Log("Tsunami GONE!");
-            Tsunami.SetActive(false);
+            if (!alreadyPlayed)
+            {
+                Debug.Log("Tsunami GONE!");
+                Tsunami.SetActive(false);
 
-            Water.enabled = false;
-            Rigidbody rigidbody = Water.GetComponent<Rigidbody>();
+                sound.Stop();
+                exsound.clip = EndChaseSound;
+                exsound.Play();
 
-            rigidbody.velocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
+                Water.enabled = false;
+                Rigidbody rigidbody = Water.GetComponent<Rigidbody>();
+
+                rigidbody.velocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3.zero;
+                alreadyPlayed = true;
+            }
 
         }
 
@@ -28,6 +47,7 @@ public class TsunamiDeTrigger : MonoBehaviour
             Debug.Log("YOU LOSE!");
 
             Water.enabled = true;
+            DeathPuzzleSource.PlayOneShot(DeathPuzzle, 1F);
         }
-    }
+}
 }

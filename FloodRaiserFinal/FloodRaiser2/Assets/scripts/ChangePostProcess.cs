@@ -9,8 +9,14 @@ public class ChangePostProcess : MonoBehaviour {
 
     private PostProcessingBehaviour camImageFx;
 
-	// Use this for initialization
-	void Start () {
+    public AudioClip Plons;
+    public AudioSource plonssource;
+
+    public AudioClip Underwater;
+    public AudioSource underwatersource;
+
+    // Use this for initialization
+    void Start () {
 
         camImageFx = FindObjectOfType<PostProcessingBehaviour>();
 
@@ -21,6 +27,8 @@ public class ChangePostProcess : MonoBehaviour {
         if (col.CompareTag("Player"))
         {
             camImageFx.profile = fx;
+            plonssource.PlayOneShot(Plons, 1F);
+            underwatersource.PlayOneShot(Underwater, 1F);
         }
 
     }
@@ -30,6 +38,8 @@ public class ChangePostProcess : MonoBehaviour {
         if (col.CompareTag("Player"))
         {
             camImageFx.profile = normal;
+            underwatersource.Stop();
+            plonssource.PlayOneShot(Plons, 1F);
         }
     }
 }
